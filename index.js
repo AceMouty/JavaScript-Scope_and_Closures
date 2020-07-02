@@ -14,9 +14,18 @@
  * Invoking `processFirstItem` passing `['foo', 'bar']` and `(str) => str + str`,
  * should return 'foofoo'.
 */
+
+function concatStr(str){
+  return str + str
+}
+
 function processFirstItem(stringList, callback) {
   return callback(stringList[0])
 }
+
+console.log(processFirstItem(["foo", "bar"], concatStr))
+
+console.log(processFirstItem(["foo", "bar"], (str) => str + str));
 
 // ⭐️ Example Challenge END ⭐️
 
@@ -27,10 +36,14 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
+ *  counter1 is a higher order function and counter2 is just a normal function that is using closure.
  * 
  * 2. Which of the two uses a closure? How can you tell?
+ *  both functions are using closure, we know this bc the variables that they are using are not within
+ *  function scope
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
+ * 
  *
 */
 
@@ -43,6 +56,10 @@ function counterMaker() {
 }
 
 const counter1 = counterMaker();
+console.log(counter1());
+console.log(counter1());
+console.log(counter1());
+
 
 // counter2 code
 let count = 0;
@@ -58,7 +75,7 @@ Write a function called `inning` that generates a random number of points that a
 
 function inning(/*Code Here*/){
 
-    /*Code Here*/
+  return Math.floor(Math.random() * Math.floor(3));
 
 }
 
@@ -76,11 +93,25 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
+function finalScore(cb, innings){
 
   /*Code Here*/
+  let home = 0;
+  let away = 0;
+
+  for(let i = 0; i < innings; i++){
+    home += cb();
+    away += cb();
+  }
+
+  return {
+    home,
+    away
+  }
 
 }
+
+console.log(finalScore(inning, 9));
 
 /* Task 4: 
 
@@ -103,8 +134,51 @@ and returns the score at each pont in the game, like so:
 
 Final Score: 6 - 10 */
 
-function scoreboard(/* CODE HERE */) {
+function scoreboard(cb, innings) {
   /* CODE HERE */
+  let home = 0;
+  let away = 0;
+
+  for( let i = 1; i <= innings; i++){
+    const currHome = cb()
+    const currAway = cb();
+
+
+    switch(i){
+      case 1:
+        console.log(`1st Inning: ${currHome} - ${currAway}`);
+        home += currHome;
+        away += currAway;
+        break;
+      case 2:
+        console.log(`2nd Inning: ${currHome} - ${currAway}`);
+        home += currHome;
+        away += currAway;
+        break;
+      case 3:
+        console.log(`3rd Inning: ${currHome} - ${currAway}`);
+        home += currHome;
+        away += currAway;
+        break;
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+        console.log(`${i}th Inning: ${currHome} - ${currAway}`);
+        home += currHome;
+        away += currAway;
+        break;
+      default:
+        console.log(`How'd we get here???`);
+    }
+
+  }
+
+  console.log()
+  console.log(`Final Score: ${home} - ${away}`);
 }
 
 
+scoreboard(inning, 9);
